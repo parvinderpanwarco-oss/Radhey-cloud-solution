@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radhey Cloud Solution | AWS Architecture, Security Audit &amp; Cost Optimization</title>
+<meta name="description" content="AWS cloud architecture, cloud security audits and cost optimization by Parvinder Panwar. Meerut, Delhi NCR. Serving clients globally.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#050d22; --deep:#081433; --card:#0b1a3d; --line:rgba(140,190,255,.16);
+    --teal:#12e5d4; --blue:#3d8bff; --violet:#7c5cff; --mist:#c5d6f5; --white:#fff; --soft:#8fa6cf;
+    --red:#ff5d73; --amber:#ffbf47; --green:#3be08f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--ink);color:var(--mist);line-height:1.7;font-size:17px;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  :focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+  .grad{background:linear-gradient(90deg,var(--teal),var(--blue),var(--violet),var(--teal));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 7s linear infinite}
+  @keyframes shine{to{background-position:300% 0}}
+
+  /* header */
+  header{position:fixed;top:0;left:0;right:0;z-index:20;background:rgba(5,13,34,.72);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .brand{font-weight:700;color:var(--white);font-size:19px}
+  .brand span{color:var(--teal)}
+  nav a{margin-left:26px;font-size:15px;color:var(--mist);transition:color .15s}
+  nav a:hover{color:var(--teal)}
+  nav a.cta{padding:9px 20px;border-radius:999px;border:1.5px solid var(--teal);color:var(--teal)}
+  nav a.cta:hover{background:var(--teal);color:var(--ink)}
+
+  /* hero */
+  .hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:130px 0 80px;overflow:hidden;
+    background:radial-gradient(900px 500px at 80% 10%,rgba(124,92,255,.22),transparent 65%),radial-gradient(800px 500px at 0% 100%,rgba(18,229,212,.16),transparent 65%),var(--ink)}
+  #net{position:absolute;inset:0;width:100%;height:100%;opacity:.9}
+  .hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+  .badge{display:inline-flex;align-items:center;gap:10px;padding:7px 16px;border:1px solid var(--line);border-radius:999px;font-size:14px;color:var(--mist);background:rgba(11,26,61,.6)}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(59,224,143,.7);animation:pulse 1.8s infinite}
+  @keyframes pulse{70%{box-shadow:0 0 0 10px rgba(59,224,143,0)}100%{box-shadow:0 0 0 0 rgba(59,224,143,0)}}
+  h1{font-size:clamp(38px,6.2vw,74px);line-height:1.04;color:var(--white);font-weight:800;letter-spacing:-.03em;margin:22px 0 0}
+  .lead{margin-top:24px;font-size:19px;max-width:52ch}
+  .who{margin-top:18px;font-size:15px;color:var(--soft)}
+  .who b{color:var(--white);font-weight:600}
+  .actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px}
+  .btn{display:inline-block;padding:15px 30px;border-radius:999px;font-weight:600;transition:transform .15s,box-shadow .15s,border-color .15s,color .15s}
+  .btn.primary{background:linear-gradient(90deg,var(--teal),var(--blue));color:var(--ink);box-shadow:0 0 0 0 rgba(18,229,212,.5)}
+  .btn.primary:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(18,229,212,.35)}
+  .btn.ghost{border:1.5px solid var(--line);color:var(--white)}
+  .btn.ghost:hover{border-color:var(--teal);color:var(--teal)}
+
+  /* terminal */
+  .term{background:rgba(4,10,26,.88);border:1px solid var(--line);border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 60px rgba(18,229,212,.12);overflow:hidden;backdrop-filter:blur(6px)}
+  .tbar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);font-size:13px;color:var(--soft)}
+  .tbar i{width:11px;height:11px;border-radius:50%;display:block}
+  .tbar i:nth-child(1){background:#ff5f57}.tbar i:nth-child(2){background:#febc2e}.tbar i:nth-child(3){background:#28c840}
+  .tbar span{margin-left:8px}
+  #tbody{padding:18px 18px 8px;font:14px/1.75 ui-monospace,"Cascadia Code",Consolas,Menlo,monospace;min-height:318px;color:var(--mist);white-space:pre-wrap;word-break:break-word}
+  #tbody .hi{color:var(--red)} #tbody .md{color:var(--amber)} #tbody .ok{color:var(--green)} #tbody .cmd{color:var(--teal)} #tbody .mut{color:var(--soft)}
+  .caret{display:inline-block;width:8px;height:15px;background:var(--teal);vertical-align:-2px;animation:blink 1s steps(2) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .tnote{padding:0 18px 14px;font-size:12px;color:var(--soft)}
+
+  /* marquee */
+  .strip{border-block:1px solid var(--line);background:var(--deep);overflow:hidden;padding:18px 0}
+  .track{display:flex;gap:56px;width:max-content;animation:slide 32s linear infinite;font-weight:600;color:var(--soft);font-size:18px}
+  .track span{white-space:nowrap}
+  .track span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--teal);margin-right:14px;transform:rotate(45deg)}
+  @keyframes slide{to{transform:translateX(-50%)}}
+
+  section{padding:100px 0}
+  h2{color:var(--white);font-size:clamp(28px,4.4vw,46px);line-height:1.12;letter-spacing:-.02em;font-weight:700;margin-bottom:18px;max-width:20ch}
+  .sub{max-width:62ch;font-size:18px}
+
+  /* about */
+  .about .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
+  .about p{margin-bottom:16px;max-width:60ch}
+  .founder{border:1px solid var(--line);border-radius:20px;padding:34px;background:linear-gradient(160deg,var(--card),var(--deep))}
+  .founder h3{color:var(--white);font-size:24px}
+  .founder .role{color:var(--teal);font-size:15px;margin-bottom:18px}
+  .founder ul{list-style:none;display:grid;gap:12px;font-size:15.5px}
+  .founder li{padding-left:22px;position:relative}
+  .founder li::before{content:"";position:absolute;left:0;top:11px;width:8px;height:8px;border-radius:2px;background:var(--teal);transform:rotate(45deg)}
+
+  /* services */
+  .grid{margin-top:46px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{position:relative;padding:30px;border-radius:20px;background:var(--card);border:1px solid var(--line);overflow:hidden;transition:transform .2s,border-color .2s}
+  .card::after{content:"";position:absolute;inset:0;background:radial-gradient(360px circle at var(--mx,50%) var(--my,0%),rgba(18,229,212,.16),transparent 60%);opacity:0;transition:opacity .25s;pointer-events:none}
+  .card:hover{transform:translateY(-5px);border-color:rgba(18,229,212,.5)}
+  .card:hover::after{opacity:1}
+  .card h3{color:var(--white);font-size:21px;line-height:1.3;margin-bottom:10px}
+  .card p{font-size:16px}
+  .feat{grid-column:span 2;grid-row:span 2;border:1.5px solid transparent;
+    background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(90deg,var(--teal),var(--blue),var(--violet),var(--teal)) border-box;
+    background-size:auto,200% 100%;animation:flow 6s linear infinite;display:flex;flex-direction:column;justify-content:center}
+  @keyframes flow{to{background-position:0 0,200% 0}}
+  .feat h3{font-size:clamp(26px,3.2vw,36px)}
+  .feat p{font-size:17.5px;max-width:48ch}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .tags b{font-weight:500;font-size:13.5px;padding:5px 13px;border-radius:999px;border:1px solid var(--line);color:var(--teal);background:rgba(18,229,212,.06)}
+
+  /* process */
+  .process{background:var(--deep);border-block:1px solid var(--line)}
+  .steps{margin-top:50px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+  .steps::before{content:"";position:absolute;left:0;right:0;top:27px;height:2px;background:linear-gradient(90deg,var(--teal),var(--blue),var(--violet))}
+  .step{position:relative;padding:0 22px 0 0}
+  .step .n{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--ink);border:2px solid var(--teal);color:var(--teal);font-weight:700;font-size:20px;box-shadow:0 0 24px rgba(18,229,212,.35);position:relative}
+  .step h3{color:var(--white);font-size:20px;margin:20px 0 6px}
+  .step p{font-size:15.5px}
+
+  /* mission */
+  .mission{text-align:center;background:radial-gradient(700px 320px at 50% 50%,rgba(61,139,255,.2),transparent 70%)}
+  .mission blockquote{font-size:clamp(26px,4.4vw,50px);line-height:1.2;color:var(--white);font-weight:700;letter-spacing:-.02em;max-width:22ch;margin:0 auto}
+
+  /* contact */
+  .contact .box{border:1px solid var(--line);border-radius:28px;padding:clamp(28px,5vw,64px);background:linear-gradient(150deg,var(--card),var(--deep));position:relative;overflow:hidden}
+  .contact .box::before{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,255,.35),transparent 70%)}
+  .cgrid{position:relative;margin-top:36px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .cgrid a{padding:20px 22px;border-radius:14px;border:1px solid var(--line);background:rgba(5,13,34,.6);transition:border-color .15s,transform .15s}
+  .cgrid a:hover{border-color:var(--teal);transform:translateY(-3px)}
+  .cgrid small{display:block;color:var(--soft);font-size:13.5px}
+  .cgrid span{color:var(--white);font-weight:500;word-break:break-all}
+
+  footer{padding:30px 0 40px;border-top:1px solid var(--line);font-size:14px;color:var(--soft)}
+
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+  .rv.in{opacity:1;transform:none}
+
+  @media (max-width:980px){
+    .hero .wrap,.about .wrap{grid-template-columns:1fr}
+    .grid{grid-template-columns:1fr 1fr}.feat{grid-column:span 2;grid-row:auto}
+    .steps{grid-template-columns:1fr 1fr;gap:34px 0}.steps::before{display:none}
+  }
+  @media (max-width:640px){
+    nav a:not(.cta){display:none}
+    .grid{grid-template-columns:1fr}.feat{grid-column:auto}
+    .steps{grid-template-columns:1fr}
+    section{padding:72px 0}.hero{padding-top:110px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .grad,.track,.feat,.dot,.caret{animation:none}
+    .rv{opacity:1;transform:none;transition:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top">Radhey <span>Cloud</span> Solution</a>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#process">Audit Process</a>
+      <a class="cta" href="#contact">Get an Audit</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <div class="hero">
+    <canvas id="net" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div>
+        <span class="badge"><i class="dot"></i> Open for cloud audits worldwide</span>
+        <h1>Find the cloud holes <span class="grad">before attackers do.</span></h1>
+        <p class="lead">Secure AWS architecture, bug-hunter style security audits and serious cost cutting for startups, agencies and growing enterprises.</p>
+        <p class="who"><b>Parvinder Panwar</b> &middot; Founder &amp; Lead Cloud Architect &middot; Security Engineer &amp; Bug Hunter</p>
+        <div class="actions">
+          <a class="btn primary" href="#contact">Book a Cloud Audit</a>
+          <a class="btn ghost" href="mailto:Parvinderpanwar.co@gmail.com?subject=Cloud%20Infrastructure%20%26%20Cost%20Audit">Email Me</a>
+        </div>
+      </div>
+
+      <div class="term" role="img" aria-label="Animated sample of a cloud security audit report">
+        <div class="tbar"><i></i><i></i><i></i><span>radhey-audit &mdash; read-only scan</span></div>
+        <div id="tbody"></div>
+        <p class="tnote">Illustrative sample output. Not real client data.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="strip" aria-hidden="true">
+    <div class="track">
+      <span>AWS Architecture</span><span>VPC Design</span><span>IAM Hardening</span><span>Security Audit</span><span>Bug Hunting</span><span>Cost Optimization</span><span>CI/CD Pipelines</span><span>Docker</span><span>Kubernetes</span><span>24/7 Support</span>
+      <span>AWS Architecture</span><span>VPC Design</span><span>IAM Hardening</span><span>Security Audit</span><span>Bug Hunting</span><span>Cost Optimization</span><span>CI/CD Pipelines</span><span>Docker</span><span>Kubernetes</span><span>24/7 Support</span>
+    </div>
+  </div>
+
+  <section id="about" class="about">
+    <div class="wrap">
+      <div class="rv">
+        <h2>Cloud expertise with an attacker&rsquo;s mindset</h2>
+        <p>Welcome to Radhey Cloud Solution. I am Parvinder Panwar, an AWS Cloud Solutions Architect who also works as a Security Engineer and bug hunter on platforms like HackerOne.</p>
+        <p>That second hat changes how I build. I know how real attackers hunt for weak spots: open storage buckets, over-permissive IAM roles, exposed secrets and forgotten resources. So every environment I design is made to hold up against them, while staying fast and cost-efficient.</p>
+        <p>Your job is to grow the business. Mine is to make sure the cloud never gets in the way.</p>
+      </div>
+      <div class="founder rv">
+        <h3>Parvinder Panwar</h3>
+        <p class="role">Founder &amp; Lead Cloud Architect</p>
+        <ul>
+          <li>AWS Cloud Solutions Architect</li>
+          <li>Security Engineer &amp; bug hunter on HackerOne</li>
+          <li>Secure VPC, IAM and multi-tier hosting</li>
+          <li>Based in Meerut (Delhi NCR), serving clients globally</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" style="padding-top:20px">
+    <div class="wrap">
+      <h2 class="rv">What I can do for your business</h2>
+      <p class="sub rv">Everything your cloud needs to be safe, lean and always on.</p>
+      <div class="grid">
+
+        <div class="card feat rv">
+          <h3>Cloud Security Audit &amp; Bug Hunting</h3>
+          <p>I go through your AWS account the way a bug hunter would and find the misconfigurations that put your data at risk, before someone else does. You get a clear report with fixes in priority order.</p>
+          <div class="tags"><b>Open S3 buckets</b><b>Risky IAM roles</b><b>Exposed secrets</b><b>Logging gaps</b><b>Public resources</b></div>
+        </div>
+
+        <div class="card rv">
+          <h3>AWS Cloud Architecture</h3>
+          <p>Secure VPCs, multi-tier hosting and strict least-privilege IAM, organized and scalable from day one.</p>
+        </div>
+
+        <div class="card rv">
+          <h3>Cloud Spend Optimization</h3>
+          <p>We audit your bill, remove idle and oversized resources, and cut your monthly AWS cost.</p>
+        </div>
+
+        <div class="card rv">
+          <h3>DevOps &amp; Automation</h3>
+          <p>CI/CD pipelines, Docker and Kubernetes for fast, stable and repeatable deployments.</p>
+        </div>
+
+        <div class="card rv">
+          <h3>24/7 Infrastructure Support</h3>
+          <p>Dedicated backend support. Infrastructure bugs and blockers get fixed quickly, so your team keeps shipping.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="process" class="process">
+    <div class="wrap">
+      <h2 class="rv">How a security audit works</h2>
+      <p class="sub rv">Simple, transparent and safe for your production environment.</p>
+      <div class="steps">
+        <div class="step rv"><div class="n">1</div><h3>Scope</h3><p>We agree on what to review. I work with read-only access to your AWS account.</p></div>
+        <div class="step rv"><div class="n">2</div><h3>Hunt</h3><p>I check IAM, storage, networking, logging and exposed data for misconfigurations.</p></div>
+        <div class="step rv"><div class="n">3</div><h3>Report</h3><p>Every finding in plain language, ranked by risk, with the exact fix.</p></div>
+        <div class="step rv"><div class="n">4</div><h3>Fix &amp; recheck</h3><p>I help your team apply the fixes, then verify that the gaps are closed.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mission">
+    <div class="wrap rv">
+      <blockquote>Bridging software development and <span class="grad">cloud excellence.</span></blockquote>
+      <p class="sub" style="margin:22px auto 0">Founders focus on growth. We handle the heavy lifting on the cloud.</p>
+    </div>
+  </section>
+
+  <section id="contact" class="contact" style="padding-top:20px">
+    <div class="wrap">
+      <div class="box rv">
+        <h2 style="position:relative">Get your Cloud Infrastructure &amp; Cost Audit</h2>
+        <p class="sub" style="position:relative">Tell me about your AWS setup and I will show you where the risks and the wasted spend are.</p>
+        <div class="cgrid">
+          <a href="mailto:Parvinderpanwar.co@gmail.com?subject=Cloud%20Infrastructure%20%26%20Cost%20Audit"><small>Email</small><span>Parvinderpanwar.co@gmail.com</span></a>
+          <a href="https://www.linkedin.com/in/parvinder-panwar-6b94a3263/" target="_blank" rel="noopener"><small>LinkedIn</small><span>Parvinder Panwar</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">&copy; <span id="yr">2026</span> Radhey Cloud Solution &middot; Parvinder Panwar &middot; Meerut, Delhi NCR, India</div>
+</footer>
+
+<script>
+document.getElementById("yr").textContent = new Date().getFullYear();
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* scroll reveal */
+const io = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll(".rv").forEach(el=>io.observe(el));
+
+/* card spotlight */
+document.querySelectorAll(".card").forEach(c=>c.addEventListener("pointermove",e=>{
+  const r=c.getBoundingClientRect();
+  c.style.setProperty("--mx",(e.clientX-r.left)+"px");
+  c.style.setProperty("--my",(e.clientY-r.top)+"px");
+}));
+
+/* hero network */
+(function(){
+  const c=document.getElementById("net"),x=c.getContext("2d");
+  let w,h,pts=[],m={x:-999,y:-999},dpr=Math.min(devicePixelRatio||1,2);
+  function size(){
+    const r=c.parentElement.getBoundingClientRect();
+    w=r.width;h=r.height;c.width=w*dpr;c.height=h*dpr;x.setTransform(dpr,0,0,dpr,0,0);
+    const n=Math.min(95,Math.floor(w*h/15000));
+    pts=Array.from({length:n},()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35}));
+  }
+  function draw(){
+    x.clearRect(0,0,w,h);
+    for(const p of pts){
+      if(!reduce){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1}
+      x.fillStyle="rgba(120,220,255,.7)";x.beginPath();x.arc(p.x,p.y,1.8,0,6.283);x.fill();
+    }
+    for(let i=0;i<pts.length;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);
+        if(d<125){x.strokeStyle="rgba(90,170,255,"+(.28*(1-d/125))+")";x.beginPath();x.moveTo(pts[i].x,pts[i].y);x.lineTo(pts[j].x,pts[j].y);x.stroke()}
+      }
+      const mx=pts[i].x-m.x,my=pts[i].y-m.y,md=Math.hypot(mx,my);
+      if(md<170){x.strokeStyle="rgba(18,229,212,"+(.7*(1-md/170))+")";x.beginPath();x.moveTo(pts[i].x,pts[i].y);x.lineTo(m.x,m.y);x.stroke()}
+    }
+    if(!reduce)requestAnimationFrame(draw);
+  }
+  size();draw();
+  addEventListener("resize",()=>{size();if(reduce)draw()});
+  c.parentElement.addEventListener("pointermove",e=>{const r=c.getBoundingClientRect();m.x=e.clientX-r.left;m.y=e.clientY-r.top});
+  c.parentElement.addEventListener("pointerleave",()=>{m.x=m.y=-999});
+})();
+
+/* terminal sample */
+(function(){
+  const el=document.getElementById("tbody");
+  const L=[
+    ["cmd","$ radhey-audit --account client-prod --mode read-only"],
+    ["mut","Connecting... read-only access confirmed"],
+    ["mut","Scanning IAM, S3, VPC, logging, snapshots..."],
+    ["hi","[HIGH]  S3 bucket 'client-assets' is publicly readable"],
+    ["hi","[HIGH]  IAM role allows Action:* on Resource:*"],
+    ["md","[MED]   CloudTrail not enabled in one region"],
+    ["md","[MED]   Security group open to 0.0.0.0/0 on port 22"],
+    ["mut","[COST]  11 unattached EBS volumes costing money"],
+    ["ok","Report ready: 5 findings, fixes ranked by risk."]
+  ];
+  if(reduce){el.innerHTML=L.map(l=>'<div class="'+l[0]+'">'+l[1].replace(/</g,"&lt;")+'</div>').join("");return}
+  const sleep=t=>new Promise(r=>setTimeout(r,t));
+  async function run(){
+    for(;;){
+      el.innerHTML="";
+      for(const [cls,txt] of L){
+        const d=document.createElement("div");d.className=cls;el.appendChild(d);
+        const cur=document.createElement("span");cur.className="caret";d.appendChild(cur);
+        const speed=cls==="cmd"?38:12;
+        for(let i=1;i<=txt.length;i++){d.textContent=txt.slice(0,i);d.appendChild(cur);await sleep(speed)}
+        cur.remove();
+        await sleep(cls==="mut"?420:300);
+      }
+      const end=document.createElement("div");end.innerHTML='$ <span class="caret"></span>';el.appendChild(end);
+      await sleep(4200);
+    }
+  }
+  run();
+})();
+</script>
+</body>
+</html>
